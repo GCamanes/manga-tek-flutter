@@ -23,7 +23,32 @@ Do not use French or any other language anywhere in the code.
 
 - `git add` is allowed to **stage** newly created files or modifications.
 
-### Summary
+## Localization
 
-You may create files, edit them, and stage them with `git add`.  
-You must **never** commit or push code.
+All user-facing strings must be accessed via the `BuildContext` extension defined in `lib/core/extensions/build_context.extensions.dart`:
+
+```dart
+context.trad.<key>
+```
+
+The `.trad` getter wraps `AppLocalizations.of(context)!` for convenience.
+
+### ✅ Correct
+
+```dart
+Text(context.trad.login)
+```
+
+### ❌ Forbidden
+
+```dart
+Text('Login')                             // hardcoded string
+Text(AppLocalizations.of(context)!.login) // use context.trad instead
+```
+
+### Adding new strings
+
+1. Add the key/value to **both** `assets/locales/en.arb` and `assets/locales/fr.arb`
+2. Run `fvm flutter gen-l10n` to regenerate `lib/generated/i18n/`
+3. Use the new key via `context.trad.<key>`
+
