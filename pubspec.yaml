@@ -41,6 +41,9 @@ dependencies:
   # Internationalization support
   intl: any
 
+  # Navigation
+  go_router: ^15.0.0
+
   # Package for assets generation
   flutter_gen_runner: ^5.15.0
 
