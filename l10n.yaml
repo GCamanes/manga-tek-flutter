@@ -1,0 +1,4 @@
+arb-dir: assets/locales
+output-dir: lib/generated/i18n
+output-localization-file: app_localizations.dart
+template-arb-file: en.arb
