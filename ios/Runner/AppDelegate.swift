@@ -12,5 +12,9 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    FlavorApiSetup.setUp(
+      binaryMessenger: engineBridge.pluginRegistry.registrar(forPlugin: "FlavorApi")!.messenger(),
+      api: FlavorApiImpl()
+    )
   }
 }

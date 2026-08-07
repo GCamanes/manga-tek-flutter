@@ -1,0 +1,3 @@
+APP_NAME = MangaTek
+APP_FLAVOR = prod
+BUNDLE_SUFFIX =
