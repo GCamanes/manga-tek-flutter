@@ -24,17 +24,13 @@ Android productFlavors          iOS xcconfigs
         │                                │
         ▼                                ▼
 FlavorApiImpl.kt             FlavorApiImpl.swift
-(reads BuildConfig.FLAVOR    (reads Bundle.main.infoDictionary
- + R.string.app_name)         + CFBundleDisplayName)
         │                                │
         └──────────── Pigeon ────────────┘
                     FlavorApi (generated)
                          │
                   ConfigHolder.initialize()
-                  (calls FlavorApi directly)
                          │
                     ConfigEntity
-                  (FlavorEnum, appName, isProd)
 ```
 
 **Key rule:** `ConfigHolder` calls `FlavorApi` directly — there is no intermediate datasource layer for flavor.
@@ -148,27 +144,7 @@ This regenerates:
 - `android/app/src/main/kotlin/com/groupany/mangatek_flutter/pigeon/PigeonFlavor.g.kt`
 - `ios/Runner/Pigeons/PigeonFlavor.g.swift`
 
-### 8. `ConfigEntity` — add field
-
-```dart
-@CopyWith()
-class ConfigEntity extends Equatable {
-  final FlavorEnum flavor;
-  final String appName;
-  final bool isProd;
-  final String apiUrl; // add this
-
-  const ConfigEntity({
-    this.flavor = FlavorEnum.dev,
-    this.appName = '',
-    this.isProd = false,
-    this.apiUrl = '', // add this
-  });
-
-  @override
-  List<Object?> get props => [flavor, appName, isProd, apiUrl]; // add apiUrl
-}
-```
+### 8. `ConfigEntity` — update entity with new field
 
 Then regenerate:
 ```bash
@@ -176,50 +152,3 @@ dart run build_runner build --delete-conflicting-outputs
 ```
 
 ### 9. `ConfigHolder` — read value and expose getter
-
-In `initialize()`:
-```dart
-_instance.currentConfig = ConfigEntity(
-  flavor: FlavorEnum.fromString(await flavorApi.getFlavor()),
-  appName: await flavorApi.getAppName(),
-  isProd: await flavorApi.isProd(),
-  apiUrl: await flavorApi.getApiUrl(), // add this
-);
-```
-
-Add static getter:
-```dart
-static String get apiUrl => _instance.currentConfig.apiUrl;
-```
-
----
-
-## Registering Pigeon on iOS (reference)
-
-Registration happens in `AppDelegate.swift` inside `didInitializeImplicitFlutterEngine`, which fires **before** the Dart VM starts:
-
-```swift
-func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
-  GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-  FlavorApiSetup.setUp(
-    binaryMessenger: engineBridge.pluginRegistry.registrar(forPlugin: "FlavorApi")!.messenger(),
-    api: FlavorApiImpl()
-  )
-}
-```
-
-> ⚠️ Do **not** register pigeon after `super.application(...)` returns — the Dart thread may already be running at that point, causing a channel-error.
-
-## Registering Pigeon on Android (reference)
-
-Registration happens in `MainActivity.kt` inside `configureFlutterEngine`:
-
-```kotlin
-override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-  super.configureFlutterEngine(flutterEngine)
-  FlavorApi.setUp(
-    flutterEngine.dartExecutor.binaryMessenger,
-    FlavorApiImpl(this)
-  )
-}
-```
