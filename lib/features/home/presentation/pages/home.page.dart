@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(ConfigHolder.instance.appName, style: Theme.of(context).textTheme.headlineMedium),
+            Text(ConfigHolder.appName, style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 24),
             ElevatedButton(onPressed: () => RouterHelper.goToLogin(context), child: Text(context.trad.logout)),
           ],
