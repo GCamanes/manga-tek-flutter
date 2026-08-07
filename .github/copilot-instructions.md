@@ -2,13 +2,7 @@
 
 ## Language
 
-**All code must be written in English.** This includes:
-
-- Variable names, method names, class names, and parameter names
-- Comments and documentation (inline comments, doc comments)
-- String literals and error messages
-- Commit messages and PR descriptions
-- Any text written as part of the codebase
+**All code must be written in English.
 
 Do not use French or any other language anywhere in the code.
 
