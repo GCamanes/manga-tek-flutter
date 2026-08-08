@@ -7,6 +7,7 @@ description: Rules for repository implementations in this app. Use when creating
 
 - Implements the domain repository interface
 - Responsibilities: call datasource(s) → map models to entities → catch and map exceptions to `AppException`
+- No business logic (belongs in use cases)
 - Name: `<Feature>RepositoryImpl` → file: `<feature>.repository_impl.dart`
 - Placed in `repositories_impl/`
 
@@ -30,11 +31,3 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 }
 ```
-
-## ❌ Forbidden
-
-| Rule |
-|------|
-| Business logic (belongs in use cases) |
-| Returning raw models (always map to entities) |
-| Throwing raw platform exceptions (always map to `AppException`) |

@@ -7,6 +7,7 @@ description: Rules for repository interfaces in this app. Use when creating or m
 
 - Defines what data operations are available to use cases — not how they are implemented
 - Always `abstract class` — no implementation here
+- No imports from `data/` or `presentation/`
 - Name: `<Feature>Repository` → file: `<feature>.repository.dart`
 
 ## Pattern
@@ -17,10 +18,3 @@ abstract class ItemRepository {
   Future<ItemEntity> getItemById(String id);
 }
 ```
-
-## ❌ Forbidden
-
-| Rule |
-|------|
-| Concrete implementations (belong in `data/repositories_impl/`) |
-| Any import from `data/` or `presentation/` |
