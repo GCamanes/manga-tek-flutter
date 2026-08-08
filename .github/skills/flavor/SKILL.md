@@ -5,35 +5,26 @@ description: Rules and patterns for Flutter flavors in this app. Use when adding
 
 ## Overview
 
-This project uses two flavors: **dev** and **prod**.
-
 | Flavor | App Name     | App ID suffix |
 |--------|--------------|---------------|
 | `dev`  | MangaTek Dev | `.dev`        |
 | `prod` | MangaTek     | *(none)*      |
 
-Flavor values are read from native platform code at startup via **Pigeon** (`FlavorApi`), then stored in a `ConfigHolder` singleton as a `ConfigEntity` before `runApp` is called.
+Flavor values flow: **native → Pigeon `FlavorApi` → `ConfigHolder` → `ConfigEntity`** (initialized before `runApp`).
+
+`ConfigHolder` calls `FlavorApi` directly — no intermediate datasource layer.
 
 ---
 
 ## Architecture
 
 ```
-Android productFlavors          iOS xcconfigs
-(build.gradle.kts)              (dev.xcconfig / prod.xcconfig)
-        │                                │
-        ▼                                ▼
-FlavorApiImpl.kt             FlavorApiImpl.swift
-        │                                │
-        └──────────── Pigeon ────────────┘
-                    FlavorApi (generated)
-                         │
-                  ConfigHolder.initialize()
-                         │
-                    ConfigEntity
+Android productFlavors                iOS xcconfigs (dev/prod.xcconfig)
+  FlavorApiImpl.kt                          FlavorApiImpl.swift
+        └──────── Pigeon FlavorApi (generated) ──────┘
+                    ConfigHolder.initialize()
+                          ConfigEntity
 ```
-
-**Key rule:** `ConfigHolder` calls `FlavorApi` directly — there is no intermediate datasource layer for flavor.
 
 ---
 
@@ -41,114 +32,48 @@ FlavorApiImpl.kt             FlavorApiImpl.swift
 
 | File | Role |
 |------|------|
-| `pigeon/flavor.pigeon.dart` | Pigeon contract — defines `FlavorApi` methods |
-| `lib/core/data/datasources/flavor/flavor.pigeon.g.dart` | Generated Dart pigeon code — **do not edit** |
-| `lib/core/domain/enum/flavor.enum.dart` | `FlavorEnum` with `dev`/`prod` cases + `fromString()` |
-| `lib/core/domain/entities/config.entity.dart` | `ConfigEntity` — holds all flavor values |
-| `lib/core/domain/entities/config.entity.g.dart` | Generated `copyWith` — **do not edit** |
-| `lib/core/helpers/config_holder.dart` | Singleton — calls `FlavorApi`, stores `ConfigEntity` |
-| `android/app/build.gradle.kts` | Android product flavors definition |
-| `android/app/src/dev/res/values/strings.xml` | Dev app name string resource |
-| `android/app/src/prod/res/values/strings.xml` | Prod app name string resource |
-| `android/app/src/main/kotlin/.../pigeon/FlavorApiImpl.kt` | Android Pigeon implementation |
-| `android/app/src/main/kotlin/.../pigeon/PigeonFlavor.g.kt` | Generated Kotlin pigeon code — **do not edit** |
-| `ios/Flutter/dev.xcconfig` | iOS dev flavor variables (`APP_NAME`, `APP_FLAVOR`, `BUNDLE_SUFFIX`) |
-| `ios/Flutter/prod.xcconfig` | iOS prod flavor variables |
-| `ios/Flutter/Debug-dev.xcconfig` etc. | Per build-type xcconfigs that include the base + flavor xcconfig |
-| `ios/Runner/Info.plist` | Uses `$(APP_NAME)` and `$(APP_FLAVOR)` |
-| `ios/Runner/Pigeons/FlavorApiImpl.swift` | iOS Pigeon implementation |
-| `ios/Runner/Pigeons/PigeonFlavor.g.swift` | Generated Swift pigeon code — **do not edit** |
-| `ios/Runner/AppDelegate.swift` | Registers `FlavorApiSetup` in `didInitializeImplicitFlutterEngine` |
+| `pigeon/flavor.pigeon.dart` | Pigeon contract |
+| `lib/core/data/datasources/flavor/flavor.pigeon.g.dart` | Generated Dart — **do not edit** |
+| `lib/core/domain/enum/flavor.enum.dart` | `FlavorEnum { dev, prod }` + `fromString()` |
+| `lib/core/domain/entities/config.entity.dart` | `ConfigEntity` (all flavor values) |
+| `lib/core/helpers/config_holder.dart` | Singleton; static getters for each field |
+| `android/app/build.gradle.kts` | `productFlavors` definition |
+| `android/app/src/<flavor>/res/values/strings.xml` | Per-flavor string resources |
+| `android/.../pigeon/FlavorApiImpl.kt` | Android implementation |
+| `android/.../pigeon/PigeonFlavor.g.kt` | Generated Kotlin — **do not edit** |
+| `ios/Flutter/dev.xcconfig` / `prod.xcconfig` | Per-flavor variables |
+| `ios/Flutter/Debug-dev.xcconfig` etc. | Build-type + flavor combos |
+| `ios/Runner/Info.plist` | Uses `$(APP_NAME)`, `$(APP_FLAVOR)` |
+| `ios/Runner/Pigeons/FlavorApiImpl.swift` | iOS implementation |
+| `ios/Runner/Pigeons/PigeonFlavor.g.swift` | Generated Swift — **do not edit** |
 
 ---
 
 ## Current flavor variables
 
-| Variable | Android source | iOS source | `ConfigEntity` field |
-|----------|---------------|------------|----------------------|
-| Flavor name | `BuildConfig.FLAVOR` | `infoDictionary["APP_FLAVOR"]` | `FlavorEnum flavor` |
-| App name | `R.string.app_name` | `infoDictionary["CFBundleDisplayName"]` | `String appName` |
-| Is prod | derived (`flavor == "prod"`) | derived | `bool isProd` |
+| Variable | Android | iOS `infoDictionary` key | `ConfigEntity` field |
+|----------|---------|--------------------------|----------------------|
+| Flavor | `BuildConfig.FLAVOR` | `APP_FLAVOR` | `FlavorEnum flavor` |
+| App name | `R.string.app_name` | `CFBundleDisplayName` | `String appName` |
+| Is prod | derived | derived | `bool isProd` |
 
 ---
 
-## How to add a new flavor variable
+## Adding a new flavor variable (checklist)
 
-Example: adding `apiUrl` (a per-flavor API base URL).
+Example: `apiUrl`.
 
-### 1. Android — string resource
-
-Add to `android/app/src/dev/res/values/strings.xml`:
-```xml
-<string name="api_url">https://api.dev.example.com</string>
-```
-
-Add to `android/app/src/prod/res/values/strings.xml`:
-```xml
-<string name="api_url">https://api.example.com</string>
-```
-
-### 2. Android — `FlavorApiImpl.kt`
-
-```kotlin
-override fun getApiUrl(): String = context.getString(R.string.api_url)
-```
-
-### 3. iOS — xcconfig
-
-Add to `ios/Flutter/dev.xcconfig`:
-```
-API_URL = https://api.dev.example.com
-```
-
-Add to `ios/Flutter/prod.xcconfig`:
-```
-API_URL = https://api.example.com
-```
-
-### 4. iOS — `Info.plist`
-
-```xml
-<key>API_URL</key>
-<string>$(API_URL)</string>
-```
-
-### 5. iOS — `FlavorApiImpl.swift`
-
-```swift
-func getApiUrl() throws -> String {
-    return Bundle.main.infoDictionary?["API_URL"] as? String ?? ""
-}
-```
-
-### 6. Pigeon contract — `pigeon/flavor.pigeon.dart`
-
-```dart
-@HostApi()
-abstract class FlavorApi {
-  String getFlavor();
-  String getAppName();
-  bool isProd();
-  String getApiUrl(); // add this
-}
-```
-
-### 7. Regenerate Pigeon
-
-```bash
-dart run pigeon --input pigeon/flavor.pigeon.dart
-```
-
-This regenerates:
-- `lib/core/data/datasources/flavor/flavor.pigeon.g.dart`
-- `android/app/src/main/kotlin/com/groupany/mangatek_flutter/pigeon/PigeonFlavor.g.kt`
-- `ios/Runner/Pigeons/PigeonFlavor.g.swift`
-
-### 8. `ConfigEntity` — update entity with new field
-
-Then regenerate:
-```bash
-dart run build_runner build --delete-conflicting-outputs
-```
-
-### 9. `ConfigHolder` — read value and expose getter
+| Step | File | Action |
+|------|------|--------|
+| 1 | `src/dev/res/values/strings.xml` | `<string name="api_url">https://dev.api.com</string>` |
+| 1 | `src/prod/res/values/strings.xml` | `<string name="api_url">https://api.com</string>` |
+| 2 | `FlavorApiImpl.kt` | `override fun getApiUrl() = context.getString(R.string.api_url)` |
+| 3 | `ios/Flutter/dev.xcconfig` | `API_URL = https://dev.api.com` |
+| 3 | `ios/Flutter/prod.xcconfig` | `API_URL = https://api.com` |
+| 4 | `ios/Runner/Info.plist` | `<key>API_URL</key><string>$(API_URL)</string>` |
+| 5 | `FlavorApiImpl.swift` | `func getApiUrl() throws -> String { Bundle.main.infoDictionary?["API_URL"] as? String ?? "" }` |
+| 6 | `pigeon/flavor.pigeon.dart` | Add `String getApiUrl();` to `FlavorApi` |
+| 7 | terminal | `dart run pigeon --input pigeon/flavor.pigeon.dart` |
+| 8 | `config.entity.dart` | Add `final String apiUrl;` field + default + props |
+| 9 | terminal | `dart run build_runner build --delete-conflicting-outputs` |
+| 10 | `config_holder.dart` | `apiUrl: await flavorApi.getApiUrl()` in `initialize()` + `static String get apiUrl` |
