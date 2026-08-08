@@ -3,91 +3,59 @@ name: localization
 description: Rules for adding and managing localized strings in this app. Use when adding new UI strings, modifying ARB files, running flutter gen-l10n, or working with translations.
 ---
 
-## Stack
+## Files
 
 | File | Role |
 |---|---|
-| `assets/locales/en.arb` | English strings (template) |
-| `assets/locales/fr.arb` | French strings |
-| `lib/generated/i18n/app_localizations.dart` | Generated — never edit manually |
+| `assets/locales/en.arb` | English strings — template, must be most complete |
+| `assets/locales/fr.arb` | French strings — no `@key` metadata needed |
+| `lib/generated/i18n/app_localizations.dart` | Generated — **never edit** |
 | `lib/core/extensions/build_context.extensions.dart` | `context.trad` shortcut |
 
 ---
 
-## Accessing strings in code
-
-Always use the `BuildContext` extension — never call `AppLocalizations` directly or hardcode strings:
+## Accessing strings
 
 ```dart
-// ✅ Correct
+// ✅ correct
 Text(context.trad.login)
 
-// ❌ Forbidden — direct AppLocalizations call
+// ❌ forbidden — direct call
 Text(AppLocalizations.of(context)!.login)
 
-// ❌ Forbidden — hardcoded string
+// ❌ forbidden — hardcoded
 Text('Login')
 ```
 
-The `.trad` getter is defined in `lib/core/extensions/build_context.extensions.dart`:
-```dart
-extension BuildContextExtension on BuildContext {
-  AppLocalizations get trad => AppLocalizations.of(this)!;
-}
-```
+---
+
+## Adding a string (checklist)
+
+| Step | File | Action |
+|------|------|--------|
+| 1 | `en.arb` | `"myKey": "My string", "@myKey": { "description": "..." }` |
+| 2 | `fr.arb` | `"myKey": "Ma chaîne"` |
+| 3 | terminal | `flutter gen-l10n` |
+| 4 | code | `context.trad.myKey` |
 
 ---
 
-## Adding a new string
+## Key naming
 
-Follow all four steps every time:
-
-### 1. Add to `assets/locales/en.arb`
-```json
-{
-  "myNewKey": "My new string",
-  "@myNewKey": { "description": "Description of when this string is used" }
-}
-```
-
-### 2. Add to `assets/locales/fr.arb`
-```json
-{
-  "myNewKey": "Ma nouvelle chaîne"
-}
-```
-
-### 3. Regenerate
-```bash
-flutter gen-l10n
-```
-
-### 4. Use in code
-```dart
-context.trad.myNewKey
-```
-
----
-
-## Key naming convention
-
-- Use **camelCase** keys (Dart identifier convention).
-- Group related keys with a common prefix:
+- camelCase keys (Dart identifier convention)
 
 | Category | Prefix | Example |
 |---|---|---|
-| Actions | none | `login`, `logout`, `save` |
-| Errors | `error` | `errorNetwork`, `errorCredentials` |
-| Labels | none | `email`, `password`, `home` |
+| Actions | none | `login`, `save` |
+| Errors | `error` | `errorNetwork` |
+| Labels | none | `email`, `home` |
 
 ---
 
-## ARB file rules
+## ARB rules
 
-- `en.arb` is the **template** — it must always be the most complete file and include `@key` metadata entries.
-- `fr.arb` does **not** need `@key` metadata entries — only the translations.
-- Write strings with actual UTF-8 characters (é, è, à, …) — never `\uXXXX` escape sequences.
-- All strings are plain text — no HTML, no platform-specific markup.
+- Strings use actual UTF-8 characters (é, è, à) — no `\uXXXX` escapes
+- No HTML or platform markup in string values
 
 ---
 
@@ -98,4 +66,4 @@ context.trad.myNewKey
 | `en` | English |
 | `fr` | French |
 
-To add a new locale: create `assets/locales/<code>.arb`, then run `flutter gen-l10n`.
+To add a locale: create `assets/locales/<code>.arb`, run `flutter gen-l10n`.

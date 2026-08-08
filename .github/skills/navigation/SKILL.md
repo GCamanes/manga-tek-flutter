@@ -3,9 +3,7 @@ name: navigation
 description: Rules and patterns for go_router navigation in this app. Use when adding routes, navigation helpers, or modifying the router.
 ---
 
-## Architecture
-
-Navigation is centralized in `lib/core/navigation/` across three files:
+## Files — `lib/core/navigation/`
 
 | File | Role |
 |---|---|
@@ -15,23 +13,18 @@ Navigation is centralized in `lib/core/navigation/` across three files:
 
 ---
 
-## Rules
+## Adding a route (all 3 files required)
 
-### 1. Every new route requires changes in all three files
-
-**`app.routes.dart`** — add both a name constant and a path constant:
+**`app.routes.dart`**
 ```dart
 static const exampleName = 'example';
 static const example = '/example';
-```
-
-For routes with path parameters:
-```dart
+// with path param:
 static const mangaName = 'manga';
 static const manga = '/manga/:id';
 ```
 
-**`app.router.dart`** — add a `GoRoute` with `name:` set:
+**`app.router.dart`**
 ```dart
 GoRoute(
   name: AppRoutes.exampleName,
@@ -40,70 +33,35 @@ GoRoute(
 ),
 ```
 
-**`router.helper.dart`** — add a static method:
+**`router.helper.dart`**
 ```dart
 static void goToExample(BuildContext context) =>
     context.goNamed(AppRoutes.exampleName);
-```
 
-For parameterized routes:
-```dart
-static void goToManga(BuildContext context, String id) =>
-    context.goNamed(AppRoutes.mangaName, pathParameters: {'id': id});
+static void pushToManga(BuildContext context, String id) =>
+    context.pushNamed(AppRoutes.mangaName, pathParameters: {'id': id});
 ```
 
 ---
 
-### 2. Pages must never call navigation directly
+## Navigation rules
 
-#### ✅ Correct
+Pages must never call navigation directly:
+
 ```dart
+// ✅ correct
 RouterHelper.goToExample(context);
-```
 
-#### ❌ Forbidden
-```dart
-context.go('/example');              // direct path — forbidden
-context.goNamed('example');          // direct named call — forbidden
-GoRouter.of(context).go('/example'); // forbidden
+// ❌ forbidden
+context.go('/example');
+context.goNamed('example');
 ```
 
 ---
 
-### 3. Always use named routes
+## Navigation type
 
-Use `context.goNamed()` inside `RouterHelper` — never `context.go()`. Named routes are path-change-safe and work cleanly with path parameters.
-
----
-
-### 4. Navigation type
-
-Use the appropriate `GoRouter` method inside `RouterHelper` depending on the desired stack behavior:
-
-| Method | Stack behavior | Helper naming |
+| Method | Stack behavior | Helper prefix |
 |---|---|---|
-| `context.goNamed(...)` | Replaces the full navigation stack | `goTo<Page>` |
-| `context.pushNamed(...)` | Pushes on top of the current stack (back button returns) | `pushTo<Page>` |
-
-**Rule:** When a route must be pushed **without clearing the navigation stack**, use `context.pushNamed()` inside `RouterHelper`. Name the method with the `pushTo` prefix to make the intent explicit at every call site.
-
-#### Example — push without clearing stack
-```dart
-// router.helper.dart
-static void pushToMangaDetail(BuildContext context, String id) =>
-    context.pushNamed(AppRoutes.mangaDetailName, pathParameters: {'id': id});
-```
-
-```dart
-// In a page
-RouterHelper.pushToMangaDetail(context, manga.id); // back button returns to previous page
-```
-
-#### Example — replace stack
-```dart
-// router.helper.dart
-static void goToHome(BuildContext context) =>
-    context.goNamed(AppRoutes.homeName); // no back button — stack is cleared
-```
-
-The `goTo` / `pushTo` naming convention makes the stack behavior visible without needing to check the router implementation.
+| `context.goNamed(...)` | Replaces full stack | `goTo` |
+| `context.pushNamed(...)` | Pushes on stack (back returns) | `pushTo` |
