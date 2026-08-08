@@ -21,9 +21,9 @@ Implement both only when write operations are needed.
 ```dart
 import 'package:mangatek_flutter/core/data/mappers/mappers.dart';
 
-class MangaMapper implements MapperTo<MangaEntity, MangaModel> {
+class ItemMapper implements MapperTo<ItemEntity, ItemModel> {
   @override
-  MangaEntity toEntity(MangaModel model) => MangaEntity(
+  ItemEntity toEntity(ItemModel model) => ItemEntity(
         id: model.id,
         title: model.title,
       );

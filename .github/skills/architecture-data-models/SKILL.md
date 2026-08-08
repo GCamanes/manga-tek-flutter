@@ -15,19 +15,19 @@ description: Rules for data models in this app. Use when creating or modifying d
 ```dart
 import 'package:json_annotation/json_annotation.dart';
 
-part 'manga.model.g.dart';
+part 'item.model.g.dart';
 
 @JsonSerializable()
-class MangaModel {
+class ItemModel {
   final String id;
   final String title;
 
-  const MangaModel({required this.id, required this.title});
+  const ItemModel({required this.id, required this.title});
 
-  factory MangaModel.fromJson(Map<String, dynamic> json) =>
-      _$MangaModelFromJson(json);
+  factory ItemModel.fromJson(Map<String, dynamic> json) =>
+      _$ItemModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MangaModelToJson(this);
+  Map<String, dynamic> toJson() => _$ItemModelToJson(this);
 }
 ```
 

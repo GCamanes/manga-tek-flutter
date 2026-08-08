@@ -13,15 +13,15 @@ description: Rules for repository implementations in this app. Use when creating
 ## Pattern
 
 ```dart
-class MangaRepositoryImpl implements MangaRepository {
-  final MangaRemoteDatasource _datasource;
-  const MangaRepositoryImpl(this._datasource);
+class ItemRepositoryImpl implements ItemRepository {
+  final ItemRemoteDatasource _datasource;
+  const ItemRepositoryImpl(this._datasource);
 
   @override
-  Future<List<MangaEntity>> getMangas() async {
+  Future<List<ItemEntity>> getItems() async {
     try {
-      final models = await _datasource.fetchMangas();
-      return models.map(MangaMapper.toEntity).toList();
+      final models = await _datasource.fetchItems();
+      return models.map(ItemMapper.toEntity).toList();
     } on FirebaseException catch (e) {
       throw AppException.fromFirebase(e);
     } catch (_) {

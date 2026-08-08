@@ -12,14 +12,14 @@ description: Rules for datasources in this app. Use when creating or modifying d
 ## Pattern
 
 ```dart
-// manga_remote.datasource.dart
-abstract class MangaRemoteDatasource {
-  Future<List<MangaModel>> fetchMangas();
+// item_remote.datasource.dart
+abstract class ItemRemoteDatasource {
+  Future<List<ItemModel>> fetchItems();
 }
 
-// manga_remote.datasource_impl.dart
-class MangaRemoteDatasourceImpl implements MangaRemoteDatasource {
+// item_remote.datasource_impl.dart
+class ItemRemoteDatasourceImpl implements ItemRemoteDatasource {
   @override
-  Future<List<MangaModel>> fetchMangas() async { /* ... */ }
+  Future<List<ItemModel>> fetchItems() async { /* ... */ }
 }
 ```

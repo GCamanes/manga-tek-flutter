@@ -9,11 +9,11 @@ description: Naming and placement rules for the data layer. Use when working on 
 
 | Type | Keyword | Example |
 |------|---------|---------|
-| Model | `.model` | `manga.model.dart` |
-| Mapper | `.mapper` | `manga.mapper.dart` |
-| Datasource (abstract) | `.datasource` | `manga_remote.datasource.dart` |
-| Datasource (impl) | `.datasource_impl` | `manga_remote.datasource_impl.dart` |
-| Repository (impl) | `.repository_impl` | `manga.repository_impl.dart` |
+| Model | `.model` | `item.model.dart` |
+| Mapper | `.mapper` | `item.mapper.dart` |
+| Datasource (abstract) | `.datasource` | `item_remote.datasource.dart` |
+| Datasource (impl) | `.datasource_impl` | `item_remote.datasource_impl.dart` |
+| Repository (impl) | `.repository_impl` | `item.repository_impl.dart` |
 
 ---
 
