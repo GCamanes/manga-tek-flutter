@@ -35,11 +35,18 @@ abstract class UseCase<P, O> {
 }
 
 abstract class StreamUseCase<P, O> {
-  Stream<O> call(P param);
+  Stream<UseCaseResult<O>> call(P param);
 
   @mustCallSuper
-  Stream<Out> guardOnStream<Out>(Stream<Out> stream) =>
-      stream.handleError((dynamic err, StackTrace stacktrace) => throw _handleError(err, stacktrace));
+  Stream<UseCaseResult<Out>> guardOnStream<Out>(Stream<Out> stream) async* {
+    try {
+      await for (final value in stream) {
+        yield UseCaseSuccess(value);
+      }
+    } catch (error, stacktrace) {
+      yield UseCaseFailure(_handleError(error, stacktrace));
+    }
+  }
 }
 
 AppException _handleError(dynamic error, StackTrace stacktrace) {

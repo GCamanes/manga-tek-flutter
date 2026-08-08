@@ -6,17 +6,21 @@ description: Rules for use cases in this app. Use when creating or modifying use
 ## Rules
 
 - Implements one specific business action
-- Must **extend** `UseCase<P, O>` from `core/domain/usecases/usecase.interface.dart`
-  - `P` = params type (use `NoParam` when no params needed)
-  - `O` = `UseCaseResult<DataType>`
-- `call()` must return the result of `guard()`; the lambda inside can call any number of repos as long as its return type matches `O`
-- Must only depend on repository interfaces — never concrete implementations or datasources
+- Two base classes in `core/domain/usecases/usecase.interface.dart`:
+
+| Class | Return type | Use for |
+|-------|------------|---------|
+| `UseCase<P, O>` | `Future<UseCaseResult<O>>` via `guard()` | One-shot async operations |
+| `StreamUseCase<P, O>` | `Stream<UseCaseResult<O>>` via `guardOnStream()` | Reactive / real-time data |
+
+- `P` = params type (use `NoParam` when no params needed), `O` = data type
+- Must only depend on repository interfaces
 - Name: `<Action>UseCase` → file: `<action>.usecase.dart`
 
-## Pattern
+## UseCase pattern
 
 ```dart
-class GetItemsUseCase extends UseCase<NoParam, UseCaseResult<List<ItemEntity>>> {
+class GetItemsUseCase extends UseCase<NoParam, List<ItemEntity>> {
   final ItemRepository _repository;
   const GetItemsUseCase(this._repository);
 
@@ -30,6 +34,19 @@ class GetItemsUseCase extends UseCase<NoParam, UseCaseResult<List<ItemEntity>>> 
 }
 ```
 
+## StreamUseCase pattern
+
+```dart
+class WatchItemsUseCase extends StreamUseCase<NoParam, List<ItemEntity>> {
+  final ItemRepository _repository;
+  const WatchItemsUseCase(this._repository);
+
+  @override
+  Stream<UseCaseResult<List<ItemEntity>>> call(NoParam param) =>
+      guardOnStream(_repository.watchItems());
+}
+```
+
 ## ❌ Forbidden
 
 | Rule |
@@ -37,4 +54,4 @@ class GetItemsUseCase extends UseCase<NoParam, UseCaseResult<List<ItemEntity>>> 
 | Calling datasources directly |
 | Importing from `data/` or `presentation/` |
 | More than one business action per class |
-| Returning repo result directly without `guard` |
+| Returning repo result directly without `guard` / `guardOnStream` |
