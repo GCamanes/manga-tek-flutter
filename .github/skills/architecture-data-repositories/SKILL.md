@@ -6,28 +6,39 @@ description: Rules for repository implementations in this app. Use when creating
 ## Rules
 
 - Implements the domain repository interface
-- Responsibilities: call datasource(s) → map models to entities → catch and map exceptions to `AppException`
+- Must use `RepositoryMixin` — never write try/catch manually
+- Responsibilities: call datasource(s) → map models to entities → let `guard`/`guardOnStream` handle error mapping
 - No business logic (belongs in use cases)
 - Name: `<Feature>RepositoryImpl` → file: `<feature>.repository_impl.dart`
 - Placed in `repositories_impl/`
 
-## Pattern
+## Pattern — Future
 
 ```dart
-class ItemRepositoryImpl implements ItemRepository {
+class ItemRepositoryImpl with RepositoryMixin implements ItemRepository {
   final ItemRemoteDatasource _datasource;
   const ItemRepositoryImpl(this._datasource);
 
   @override
-  Future<List<ItemEntity>> getItems() async {
-    try {
-      final models = await _datasource.fetchItems();
-      return models.map(ItemMapper.toEntity).toList();
-    } on FirebaseException catch (e) {
-      throw AppException.fromFirebase(e);
-    } catch (_) {
-      throw const AppException.unknown();
-    }
-  }
+  Future<List<ItemEntity>> getItems() =>
+      guard(() async {
+        final models = await _datasource.fetchItems();
+        return models.map(ItemMapper.toEntity).toList();
+      });
+}
+```
+
+## Pattern — Stream
+
+```dart
+class ItemRepositoryImpl with RepositoryMixin implements ItemRepository {
+  final ItemRemoteDatasource _datasource;
+  const ItemRepositoryImpl(this._datasource);
+
+  @override
+  Stream<List<ItemEntity>> watchItems() =>
+      guardOnStream(
+        _datasource.watchItems().map((models) => models.map(ItemMapper.toEntity).toList()),
+      );
 }
 ```
