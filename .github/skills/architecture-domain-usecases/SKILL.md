@@ -15,6 +15,7 @@ description: Rules for use cases in this app. Use when creating or modifying use
 
 - `P` = params type (use `NoParam` when no params needed), `O` = data type
 - Must only depend on repository interfaces
+- Must **always** wrap the return value with `guard()` or `guardOnStream()` — never return a repo result directly
 - Name: `<Action>UseCase` → file: `<action>.usecase.dart`
 
 ## UseCase pattern
@@ -46,12 +47,3 @@ class WatchItemsUseCase extends StreamUseCase<NoParam, List<ItemEntity>> {
       guardOnStream(_repository.watchItems());
 }
 ```
-
-## ❌ Forbidden
-
-| Rule |
-|------|
-| Calling datasources directly |
-| Importing from `data/` or `presentation/` |
-| More than one business action per class |
-| Returning repo result directly without `guard` / `guardOnStream` |
