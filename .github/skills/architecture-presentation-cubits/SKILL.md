@@ -1,46 +1,37 @@
 ---
 name: architecture-presentation-cubits
-description: Rules for cubits and states in this app. Use when creating or modifying cubits or state classes.
+description: Rules for cubits in this app. Use when creating or modifying cubits.
 ---
 
 ## Rules
 
 - Manages UI state — the only presentation component that calls use cases
-- Must **not** call datasources or repositories directly
-- Must **not** contain navigation — use `RouterHelper` in pages
-- Each cubit has a dedicated state file in the same folder
-- Handle use case results with `switch` on `UseCaseResult`
+- Must extend `CustomCubit<T>` — never extend `Cubit` directly
+- Must depend on use cases only — no datasources, repositories, or navigation
+- One cubit = one use case: call `execute()` for `UseCase`, `watch()` for `StreamUseCase`
 
-## Pattern
+## Pattern — UseCase (one-shot)
 
 ```dart
-// item_list.state.dart
-sealed class ItemListState {}
-class ItemListInitial extends ItemListState {}
-class ItemListLoading extends ItemListState {}
-class ItemListLoaded extends ItemListState {
-  final List<ItemEntity> items;
-  ItemListLoaded(this.items);
-}
-class ItemListError extends ItemListState {
-  final AppException error;
-  ItemListError(this.error);
-}
-
 // item_list.cubit.dart
-class ItemListCubit extends Cubit<ItemListState> {
+class ItemListCubit extends CustomCubit<List<ItemEntity>> {
   final GetItemsUseCase _getItems;
 
-  ItemListCubit(this._getItems) : super(ItemListInitial());
+  ItemListCubit(this._getItems);
 
-  Future<void> loadItems() async {
-    emit(ItemListLoading());
-    switch (await _getItems(NoParam())) {
-      case UseCaseSuccess(:final data):
-        emit(ItemListLoaded(data));
-      case UseCaseFailure(:final exception):
-        emit(ItemListError(exception));
-    }
-  }
+  Future<void> loadItems() => execute(_getItems(NoParam()));
+}
+```
+
+## Pattern — StreamUseCase (reactive)
+
+```dart
+// items_watch.cubit.dart
+class ItemsWatchCubit extends CustomCubit<List<ItemEntity>> {
+  final WatchItemsUseCase _watchItems;
+
+  ItemsWatchCubit(this._watchItems);
+
+  Future<void> startWatching() => watch(_watchItems(NoParam()));
 }
 ```
