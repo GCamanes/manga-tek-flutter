@@ -9,8 +9,6 @@ description: Rules for reusable widgets in this app. Use when creating or modify
 - Must **not** depend on cubits or use cases
 - Must **not** contain navigation logic
 - All text via `context.trad.<key>` — no hardcoded strings
-- Generic (cross-feature) → `core/presentation/widgets/`
-- Feature-specific → `features/<name>/presentation/widgets/`
 
 ## Pattern
 
