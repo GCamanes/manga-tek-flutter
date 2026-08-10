@@ -50,6 +50,13 @@ abstract class CustomCubit<T> extends Cubit<BaseState<T>> {
     );
   }
 
+  /// Resets the cubit to its initial state and cancels any active subscription.
+  Future<void> reset() async {
+    await _streamSubscription?.cancel();
+    _streamSubscription = null;
+    emit(const BaseState.initial());
+  }
+
   @override
   Future<void> close() async {
     await _streamSubscription?.cancel();
