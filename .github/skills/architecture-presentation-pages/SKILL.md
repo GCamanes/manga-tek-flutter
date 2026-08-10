@@ -10,6 +10,7 @@ description: Rules for pages in this app. Use when creating or modifying pages.
 - Instantiate cubits directly in `BlocProvider.create`, injecting use cases via `getIt`
 - The page's own `build` context is **above** `BlocProvider` — use `context.read<MyCubit>()` only inside `BlocBuilder`'s builder or descendant widget callbacks, never in the outer build scope
 - All text via `context.trad.<key>` — no hardcoded strings
+- All colors via `context.colorTheme.<field>` — never hardcode `Color(...)` or use `Theme.of(context).colorScheme` directly
 - Navigation via `RouterHelper` — never `context.go()` directly
 
 ## Pattern
