@@ -23,25 +23,25 @@ sealed class BaseState<T> {
   R when<R>({
     required R Function() onInitial,
     required R Function() onLoading,
-    required R Function(T data, DateTime timestamp) onSuccess,
-    required R Function(AppException error, DateTime timestamp) onError,
+    required R Function(T data) onSuccess,
+    required R Function(AppException error) onError,
   }) => switch (this) {
     _BaseInitial() => onInitial(),
     _BaseLoading() => onLoading(),
-    _BaseSuccess(:final data, :final timestamp) => onSuccess(data, timestamp),
-    _BaseError(:final error, :final timestamp) => onError(error, timestamp),
+    _BaseSuccess(:final data) => onSuccess(data),
+    _BaseError(:final error) => onError(error),
   };
 
   R? maybe<R>({
     R Function()? onInitial,
     R Function()? onLoading,
-    R Function(T data, DateTime timestamp)? onSuccess,
-    R Function(AppException error, DateTime timestamp)? onError,
+    R Function(T data)? onSuccess,
+    R Function(AppException error)? onError,
   }) => switch (this) {
     _BaseInitial() => onInitial?.call(),
     _BaseLoading() => onLoading?.call(),
-    _BaseSuccess(:final data, :final timestamp) => onSuccess?.call(data, timestamp),
-    _BaseError(:final error, :final timestamp) => onError?.call(error, timestamp),
+    _BaseSuccess(:final data) => onSuccess?.call(data),
+    _BaseError(:final error) => onError?.call(error),
   };
 }
 

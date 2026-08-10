@@ -28,8 +28,8 @@ class ItemListPage extends StatelessWidget {
           builder: (context, state) => state.when(
             onInitial: () => const SizedBox.shrink(),
             onLoading: () => const CircularProgressIndicator(),
-            onSuccess: (items, _) => ItemListView(items),
-            onError: (error, _) => ErrorView(error),
+            onSuccess: (items) => ItemListView(items),
+            onError: (error) => ErrorView(error),
           ),
         ),
       ),
