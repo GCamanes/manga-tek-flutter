@@ -1,6 +1,6 @@
 ---
 name: skill-creation
-description: Rules for creating or editing agent skills in this project. Use when adding a new skill file or reviewing an existing one.
+description: Rules for creating or editing agent skills in this project. Use when adding, modifying, or reviewing any skill file.
 ---
 
 ## File location
