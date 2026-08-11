@@ -3,8 +3,8 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/core/data/datasources/flavor/flavor.pigeon.g.dart',
-    kotlinOut: 'android/app/src/main/kotlin/com/groupany/mangatek_flutter/pigeon/PigeonFlavor.g.kt',
-    kotlinOptions: KotlinOptions(package: 'com.groupany.mangatek_flutter.pigeon'),
+    kotlinOut: 'android/app/src/main/kotlin/fr/groupany/flutter/mangatek/pigeon/PigeonFlavor.g.kt',
+    kotlinOptions: KotlinOptions(package: 'fr.groupany.flutter.mangatek.pigeon'),
     swiftOut: 'ios/Runner/Pigeons/PigeonFlavor.g.swift',
     swiftOptions: SwiftOptions(),
     dartPackageName: 'pigeon_flavor_package',

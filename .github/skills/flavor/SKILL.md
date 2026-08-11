@@ -1,14 +1,14 @@
 ---
 name: flavor
-description: Rules and patterns for Flutter flavors in this app. Use when adding flavor variables, modifying flavor config, or working with ConfigHolder, ConfigEntity, FlavorEnum, or the Pigeon FlavorApi.
+description: Rules and patterns for Flutter flavors in this app. Use when adding flavor variables, modifying flavor config, changing the bundle ID / application ID / package name, modifying productFlavors in build.gradle.kts, modifying xcconfig files, running dart run pigeon, or working with ConfigHolder, ConfigEntity, FlavorEnum, or the Pigeon FlavorApi.
 ---
 
 ## Overview
 
-| Flavor | App Name     | App ID suffix |
-|--------|--------------|---------------|
-| `dev`  | MangaTek Dev | `.dev`        |
-| `prod` | MangaTek     | *(none)*      |
+| Flavor | App Name     | Bundle/App ID | App ID suffix |
+|--------|--------------|---------------|---------------|
+| `dev`  | MangaTek Dev | `fr.groupany.flutter.mangatek.dev` | `.dev` |
+| `prod` | MangaTek     | `fr.groupany.flutter.mangatek.prod` | `.prod` |
 
 Flavor values flow: **native → Pigeon `FlavorApi` → `ConfigHolder` → `ConfigEntity`** (initialized before `runApp`).
 

@@ -1,3 +1,3 @@
 APP_NAME = MangaTek
 APP_FLAVOR = prod
-BUNDLE_SUFFIX =
+BUNDLE_SUFFIX = .prod

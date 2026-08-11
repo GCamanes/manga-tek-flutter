@@ -1,8 +1,8 @@
-package com.groupany.mangatek_flutter.pigeon
+package fr.groupany.flutter.mangatek.pigeon
 
 import android.content.Context
-import com.groupany.mangatek_flutter.BuildConfig
-import com.groupany.mangatek_flutter.R
+import fr.groupany.flutter.mangatek.BuildConfig
+import fr.groupany.flutter.mangatek.R
 
 class FlavorApiImpl(private val context: Context) : FlavorApi {
     override fun getFlavor(): String = BuildConfig.FLAVOR

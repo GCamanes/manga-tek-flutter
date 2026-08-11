@@ -1,7 +1,7 @@
-package com.groupany.mangatek_flutter
+package fr.groupany.flutter.mangatek
 
-import com.groupany.mangatek_flutter.pigeon.FlavorApi
-import com.groupany.mangatek_flutter.pigeon.FlavorApiImpl
+import fr.groupany.flutter.mangatek.pigeon.FlavorApi
+import fr.groupany.flutter.mangatek.pigeon.FlavorApiImpl
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
