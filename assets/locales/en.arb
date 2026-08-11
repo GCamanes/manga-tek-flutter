@@ -1,0 +1,57 @@
+{
+  "@@locale": "en",
+
+  "appName": "MangaTek",
+  "@appName": { "description": "The application name" },
+
+  "login": "Login",
+  "@login": { "description": "Login action" },
+
+  "logout": "Logout",
+  "@logout": { "description": "Logout action" },
+
+  "resumeReading": "Resume reading",
+  "@resumeReading": { "description": "Resume reading action" },
+
+  "startReading": "Start reading",
+  "@startReading": { "description": "Start reading action" },
+
+  "errorCredentials": "Invalid email or password",
+  "@errorCredentials": { "description": "Error shown when credentials are invalid" },
+
+  "errorEmpty": "Oops, there is nothing here…",
+  "@errorEmpty": { "description": "Error shown when a list is empty" },
+
+  "errorNetwork": "Network issue, please check your internet access",
+  "@errorNetwork": { "description": "Error shown on network failure" },
+
+  "errorTooManyRequest": "Too many request have been made, please wait and try again",
+  "@errorTooManyRequest": { "description": "Error shown on rate limiting" },
+
+  "errorUnknown": "An unknown error has occurred",
+  "@errorUnknown": { "description": "Generic unknown error" },
+
+  "chapter": "Chapter",
+  "@chapter": { "description": "Singular chapter label" },
+
+  "chapters": "Chapters",
+  "@chapters": { "description": "Plural chapters label" },
+
+  "email": "Email",
+  "@email": { "description": "Email field label" },
+
+  "home": "Home",
+  "@home": { "description": "Home navigation label" },
+
+  "language": "Language",
+  "@language": { "description": "Language setting label" },
+
+  "password": "Password",
+  "@password": { "description": "Password field label" },
+
+  "settings": "Settings",
+  "@settings": { "description": "Settings navigation label" },
+
+  "version": "Version",
+  "@version": { "description": "Version label" }
+}

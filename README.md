@@ -1,17 +1,13 @@
 # mangatek_flutter
 
-A new Flutter project.
+A Flutter app to read manga on mobile phone.
 
-## Getting Started
+## Files generation with build runner
 
-This project is a starting point for a Flutter application.
+Generated files are not versioned, so it is mandatory to generate them before building the app.
+Concerned files:
+- images, icons and fonts assets via flutter_gen_runner
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+dart run build_runner build --delete-conflicting-outputs 2>&1 | tee build_runner.log
+```
