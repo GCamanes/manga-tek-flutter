@@ -12,3 +12,6 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Firebase — do not commit, download from Firebase Console (see README)
+**/google-services.json

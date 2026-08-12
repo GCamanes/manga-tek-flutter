@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mangatek_flutter/core/di/injection.dart';
 import 'package:mangatek_flutter/core/helpers/config_holder.dart';
@@ -8,6 +9,9 @@ import 'generated/i18n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Firebase initialization (uses native GoogleService-Info.plist / google-services.json per flavor)
+  await Firebase.initializeApp();
 
   /// Dependency injection
   await configureDependencies();
