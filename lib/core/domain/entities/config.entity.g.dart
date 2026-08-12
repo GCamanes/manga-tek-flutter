@@ -11,6 +11,8 @@ abstract class _$ConfigEntityCWProxy {
 
   ConfigEntity appName(String appName);
 
+  ConfigEntity appVersion(String appVersion);
+
   ConfigEntity isProd(bool isProd);
 
   /// Creates a new instance with the provided field values.
@@ -20,7 +22,12 @@ abstract class _$ConfigEntityCWProxy {
   /// ```dart
   /// ConfigEntity(...).copyWith(id: 12, name: "My name")
   /// ```
-  ConfigEntity call({FlavorEnum flavor, String appName, bool isProd});
+  ConfigEntity call({
+    FlavorEnum flavor,
+    String appName,
+    String appVersion,
+    bool isProd,
+  });
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -37,6 +44,9 @@ class _$ConfigEntityCWProxyImpl implements _$ConfigEntityCWProxy {
   ConfigEntity appName(String appName) => call(appName: appName);
 
   @override
+  ConfigEntity appVersion(String appVersion) => call(appVersion: appVersion);
+
+  @override
   ConfigEntity isProd(bool isProd) => call(isProd: isProd);
 
   @override
@@ -50,6 +60,7 @@ class _$ConfigEntityCWProxyImpl implements _$ConfigEntityCWProxy {
   ConfigEntity call({
     Object? flavor = const $CopyWithPlaceholder(),
     Object? appName = const $CopyWithPlaceholder(),
+    Object? appVersion = const $CopyWithPlaceholder(),
     Object? isProd = const $CopyWithPlaceholder(),
   }) {
     return ConfigEntity(
@@ -61,6 +72,11 @@ class _$ConfigEntityCWProxyImpl implements _$ConfigEntityCWProxy {
           ? _value.appName
           // ignore: cast_nullable_to_non_nullable
           : appName as String,
+      appVersion:
+          appVersion == const $CopyWithPlaceholder() || appVersion == null
+          ? _value.appVersion
+          // ignore: cast_nullable_to_non_nullable
+          : appVersion as String,
       isProd: isProd == const $CopyWithPlaceholder() || isProd == null
           ? _value.isProd
           // ignore: cast_nullable_to_non_nullable

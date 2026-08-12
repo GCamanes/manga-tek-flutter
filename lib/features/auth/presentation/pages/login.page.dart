@@ -13,7 +13,6 @@ import 'package:mangatek_flutter/features/auth/domain/entities/user.entity.dart'
 import 'package:mangatek_flutter/features/auth/presentation/cubits/get_current_user.cubit.dart';
 import 'package:mangatek_flutter/features/auth/presentation/cubits/login.cubit.dart';
 import 'package:mangatek_flutter/generated/assets.gen.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,8 +32,6 @@ class _LoginPageState extends State<LoginPage>
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  String _version = '';
 
   @override
   void initState() {
@@ -58,14 +55,7 @@ class _LoginPageState extends State<LoginPage>
       CurvedAnimation(parent: _formAnimController, curve: Curves.easeIn),
     );
 
-    _loadVersion();
     _getCurrentUserCubit.getCurrentUser();
-  }
-
-  Future<void> _loadVersion() async {
-    final info = await PackageInfo.fromPlatform();
-    final flavor = ConfigHolder.flavor.name;
-    if (mounted) setState(() => _version = '${info.version}-$flavor');
   }
 
   @override
@@ -126,7 +116,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   const SizedBox(height: 32),
                   Text(
-                    _version,
+                    ConfigHolder.appVersion,
                     style: TextStyle(
                       color: colors.onSurfaceVariant,
                       fontSize: 13,

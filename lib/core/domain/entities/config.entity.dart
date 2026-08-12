@@ -9,10 +9,16 @@ part 'config.entity.g.dart';
 class ConfigEntity extends Equatable {
   final FlavorEnum flavor;
   final String appName;
+  final String appVersion;
   final bool isProd;
 
-  const ConfigEntity({this.flavor = FlavorEnum.dev, this.appName = '', this.isProd = false});
+  const ConfigEntity({
+    this.flavor = FlavorEnum.dev,
+    this.appName = '',
+    this.appVersion = '',
+    this.isProd = false,
+  });
 
   @override
-  List<Object?> get props => [flavor, appName, isProd];
+  List<Object?> get props => [flavor, appName, appVersion, isProd];
 }
