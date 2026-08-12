@@ -1,6 +1,6 @@
 ---
 name: architecture-domain-usecases-tests
-description: Rules for unit testing use cases in this app. Use when writing or reviewing use case tests.
+description: Rules for unit testing use cases in this app. Use when creating, modifying, or reviewing use cases — tests are required for every use case.
 ---
 
 ## Rules

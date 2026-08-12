@@ -1,6 +1,6 @@
 ---
 name: architecture-presentation-cubits-tests
-description: Rules for unit testing cubits in this app. Use when writing or reviewing cubit tests.
+description: Rules for unit testing cubits in this app. Use when creating, modifying, or reviewing cubits — tests are required for every cubit.
 ---
 
 ## Rules
@@ -19,6 +19,9 @@ description: Rules for unit testing cubits in this app. Use when writing or revi
 
 ## UseCase cubit test
 
+State type is `BaseState<T>` (from `core/presentation/cubits/base.state.dart`).  
+Use `predicate<BaseState<T>>(...)` since the subclasses are private.
+
 ```dart
 // test/item/presentation/cubits/item_list.cubit_test.dart
 import 'package:bloc_test/bloc_test.dart';
@@ -33,78 +36,34 @@ void main() {
   setUp(() => getItems = _MockGetItemsUseCase());
 
   group('ItemListCubit', () {
-    blocTest<ItemListCubit, CustomCubitState<List<ItemEntity>>>(
+    blocTest<ItemListCubit, BaseState<List<ItemEntity>>>(
       'emits loading then success',
       build: () {
-        when(() => getItems(NoParam()))
+        when(() => getItems())
             .thenAnswer((_) async => UseCaseSuccess([]));
         return ItemListCubit(getItems);
       },
       act: (cubit) => cubit.loadItems(),
       expect: () => [
-        isA<CustomCubitLoadingState<List<ItemEntity>>>(),
-        isA<CustomCubitSuccessState<List<ItemEntity>>>(),
+        predicate<BaseState<List<ItemEntity>>>((s) => s.isLoading),
+        predicate<BaseState<List<ItemEntity>>>((s) => s.dataOrNull != null),
       ],
     );
 
-    blocTest<ItemListCubit, CustomCubitState<List<ItemEntity>>>(
+    blocTest<ItemListCubit, BaseState<List<ItemEntity>>>(
       'emits loading then error on failure',
       build: () {
-        when(() => getItems(NoParam())).thenAnswer(
+        when(() => getItems()).thenAnswer(
           (_) async => UseCaseFailure(AppException(type: ExceptionType.unknown)),
         );
         return ItemListCubit(getItems);
       },
       act: (cubit) => cubit.loadItems(),
       expect: () => [
-        isA<CustomCubitLoadingState<List<ItemEntity>>>(),
-        isA<CustomCubitErrorState<List<ItemEntity>>>(),
-      ],
-    );
-  });
-}
-```
-
-## StreamUseCase cubit test
-
-```dart
-// test/item/presentation/cubits/items_watch.cubit_test.dart
-class _MockWatchItemsUseCase extends Mock implements WatchItemsUseCase {}
-
-void main() {
-  late _MockWatchItemsUseCase watchItems;
-
-  setUp(() => watchItems = _MockWatchItemsUseCase());
-
-  group('ItemsWatchCubit', () {
-    blocTest<ItemsWatchCubit, CustomCubitState<List<ItemEntity>>>(
-      'emits loading then success on stream event',
-      build: () {
-        when(() => watchItems(NoParam()))
-            .thenAnswer((_) => Stream.value(UseCaseSuccess([])));
-        return ItemsWatchCubit(watchItems);
-      },
-      act: (cubit) => cubit.startWatching(),
-      expect: () => [
-        isA<CustomCubitLoadingState<List<ItemEntity>>>(),
-        isA<CustomCubitSuccessState<List<ItemEntity>>>(),
-      ],
-    );
-
-    blocTest<ItemsWatchCubit, CustomCubitState<List<ItemEntity>>>(
-      'emits loading then error on stream failure',
-      build: () {
-        when(() => watchItems(NoParam())).thenAnswer(
-          (_) => Stream.value(
-            UseCaseFailure(AppException(type: ExceptionType.unknown)),
-          ),
-        );
-        return ItemsWatchCubit(watchItems);
-      },
-      act: (cubit) => cubit.startWatching(),
-      expect: () => [
-        isA<CustomCubitLoadingState<List<ItemEntity>>>(),
-        isA<CustomCubitErrorState<List<ItemEntity>>>(),
+        predicate<BaseState<List<ItemEntity>>>((s) => s.isLoading),
+        predicate<BaseState<List<ItemEntity>>>(
+          (s) => s.maybe(onError: (e) => e.type == ExceptionType.unknown) ?? false,
+        ),
       ],
     );
   });

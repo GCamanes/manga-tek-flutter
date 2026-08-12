@@ -1,6 +1,6 @@
 ---
 name: architecture-data-repositories-tests
-description: Rules for unit testing repository implementations in this app. Use when writing or reviewing repository implementation tests.
+description: Rules for unit testing repository implementations in this app. Use when creating, modifying, or reviewing repository implementations — tests are required for every repository impl.
 ---
 
 ## Rules
