@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mangatek_flutter/core/theme/constants.theme.dart';
 
 import 'app_colors.dart' as colors;
 import 'color_theme.dart';
@@ -65,6 +66,7 @@ class AppTheme {
           error: error,
           onError: colors.onError,
         ),
+        ConstantsTheme(),
       ],
     );
   }

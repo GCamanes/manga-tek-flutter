@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mangatek_flutter/core/theme/color_theme.dart';
+import 'package:mangatek_flutter/core/theme/theme.dart';
 import 'package:mangatek_flutter/generated/i18n/app_localizations.dart';
 
 extension BuildContextExtension on BuildContext {
@@ -10,4 +10,6 @@ extension BuildContextExtension on BuildContext {
   AppLocalizations get trad => AppLocalizations.of(this)!;
 
   ColorTheme get colorTheme => Theme.of(this).extension<ColorTheme>()!;
+
+  ConstantsTheme get constantsTheme => Theme.of(this).extension<ConstantsTheme>()!;
 }

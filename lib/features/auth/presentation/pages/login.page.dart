@@ -84,6 +84,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
+    final constants = context.constantsTheme;
 
     return MultiBlocProvider(
       providers: [
@@ -102,7 +103,7 @@ class _LoginPageState extends State<LoginPage>
               ),
             ],
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: constants.paddingLarge),
               child: Column(
                 children: [
                   const Spacer(),
@@ -114,7 +115,7 @@ class _LoginPageState extends State<LoginPage>
                     emailController: _emailController,
                     passwordController: _passwordController,
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: constants.paddingLarge),
                   Text(
                     ConfigHolder.appVersion,
                     style: TextStyle(
@@ -122,7 +123,7 @@ class _LoginPageState extends State<LoginPage>
                       fontSize: 13,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: constants.paddingMedium),
                 ],
               ),
             ),
@@ -141,12 +142,13 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
+    final constants = context.constantsTheme;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Assets.images.mangatekLogo.image(width: 160),
-        const SizedBox(height: 12),
+        SizedBox(height: constants.paddingSmall),
         RichText(
           text: TextSpan(
             children: [
@@ -232,6 +234,7 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trad = context.trad;
+    final constants = context.constantsTheme;
 
     return BlocBuilder<LoginCubit, BaseState<UserEntity>>(
       builder: (context, loginState) {
@@ -251,7 +254,7 @@ class _LoginForm extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: constants.paddingMedium),
             CustomTextField(
               label: trad.password,
               controller: passwordController,
@@ -261,13 +264,13 @@ class _LoginForm extends StatelessWidget {
               onSubmitted: (_) => _submit(context),
             ),
             if (hasError) ...[
-              const SizedBox(height: 12),
+              SizedBox(height: constants.paddingSmall),
               Text(
                 trad.errorCredentials,
                 style: TextStyle(color: context.colorTheme.error, fontSize: 13),
               ),
             ],
-            const SizedBox(height: 24),
+            SizedBox(height: constants.paddingMedium),
             CustomButton(
               label: trad.login,
               isLoading: isLoading,

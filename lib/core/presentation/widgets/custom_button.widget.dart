@@ -20,6 +20,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
+    final constants = context.constantsTheme;
     final isPrimary = type == CustomButtonType.primary;
 
     final effectiveOnPressed = isLoading ? null : onPressed;
@@ -46,7 +47,7 @@ class CustomButton extends StatelessWidget {
 
     if (isPrimary) {
       return SizedBox(
-        height: 56,
+        height: constants.buttonHeight,
         width: double.infinity,
         child: ElevatedButton(
           onPressed: effectiveOnPressed,
@@ -54,7 +55,7 @@ class CustomButton extends StatelessWidget {
             backgroundColor: colors.primary,
             disabledBackgroundColor: colors.primary.withValues(alpha: 0.6),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(constants.cornerRound),
             ),
           ),
           child: child,
@@ -63,14 +64,14 @@ class CustomButton extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 56,
+      height: constants.buttonHeight,
       width: double.infinity,
       child: OutlinedButton(
         onPressed: effectiveOnPressed,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: colors.primary),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(constants.cornerRound),
           ),
         ),
         child: child,

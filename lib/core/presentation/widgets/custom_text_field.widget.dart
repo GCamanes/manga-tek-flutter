@@ -37,6 +37,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
+    final constants = context.constantsTheme;
+    final radius = BorderRadius.circular(constants.cornerRound);
 
     return TextField(
       controller: widget.controller,
@@ -52,19 +54,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
         filled: true,
         fillColor: colors.surfaceVariant,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: radius,
           borderSide: BorderSide(color: colors.onSurfaceVariant),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: radius,
           borderSide: BorderSide(color: colors.onSurfaceVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: radius,
           borderSide: BorderSide(color: colors.primary, width: 1.5),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: radius,
           borderSide: BorderSide(
             color: colors.onSurfaceVariant.withValues(alpha: 0.4),
           ),
