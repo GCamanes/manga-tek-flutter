@@ -12,4 +12,6 @@ extension BuildContextExtension on BuildContext {
   ColorTheme get colorTheme => Theme.of(this).extension<ColorTheme>()!;
 
   ConstantsTheme get constantsTheme => Theme.of(this).extension<ConstantsTheme>()!;
+
+  TextTheme get textTheme => Theme.of(this).textTheme;
 }

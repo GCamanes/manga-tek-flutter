@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mangatek_flutter/core/di/injection.dart';
 import 'package:mangatek_flutter/core/helpers/config_holder.dart';
 import 'package:mangatek_flutter/core/navigation/app.router.dart';
-import 'package:mangatek_flutter/core/theme/app_theme.dart';
+import 'package:mangatek_flutter/core/theme/app.theme.dart';
 
 import 'generated/i18n/app_localizations.dart';
 

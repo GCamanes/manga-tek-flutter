@@ -21,8 +21,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   late final GetCurrentUserCubit _getCurrentUserCubit;
   late final LoginCubit _loginCubit;
 
@@ -40,20 +39,15 @@ class _LoginPageState extends State<LoginPage>
     _getCurrentUserCubit = getIt<GetCurrentUserCubit>();
     _loginCubit = getIt<LoginCubit>();
 
-    _formAnimController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
+    _formAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 1),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _formAnimController,
-      curve: Curves.easeOut,
-    ));
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _formAnimController, curve: Curves.easeIn),
-    );
+    ).animate(CurvedAnimation(parent: _formAnimController, curve: Curves.easeOut));
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _formAnimController, curve: Curves.easeIn));
 
     _getCurrentUserCubit.getCurrentUser();
   }
@@ -69,22 +63,18 @@ class _LoginPageState extends State<LoginPage>
   }
 
   void _onCurrentUserState(BuildContext context, BaseState<UserEntity> state) {
-    state.maybe(
-      onSuccess: (_) => RouterHelper.goToHome(context),
-      onError: (_) => _formAnimController.forward(),
-    );
+    state.maybe(onSuccess: (_) => RouterHelper.goToHome(context), onError: (_) => _formAnimController.forward());
   }
 
   void _onLoginState(BuildContext context, BaseState<UserEntity> state) {
-    state.maybe(
-      onSuccess: (_) => RouterHelper.goToHome(context),
-    );
+    state.maybe(onSuccess: (_) => RouterHelper.goToHome(context));
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
     final constants = context.constantsTheme;
+    final text = context.textTheme;
 
     return MultiBlocProvider(
       providers: [
@@ -95,12 +85,8 @@ class _LoginPageState extends State<LoginPage>
         body: SafeArea(
           child: MultiBlocListener(
             listeners: [
-              BlocListener<GetCurrentUserCubit, BaseState<UserEntity>>(
-                listener: _onCurrentUserState,
-              ),
-              BlocListener<LoginCubit, BaseState<UserEntity>>(
-                listener: _onLoginState,
-              ),
+              BlocListener<GetCurrentUserCubit, BaseState<UserEntity>>(listener: _onCurrentUserState),
+              BlocListener<LoginCubit, BaseState<UserEntity>>(listener: _onLoginState),
             ],
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: constants.paddingLarge),
@@ -116,13 +102,7 @@ class _LoginPageState extends State<LoginPage>
                     passwordController: _passwordController,
                   ),
                   SizedBox(height: constants.paddingLarge),
-                  Text(
-                    ConfigHolder.appVersion,
-                    style: TextStyle(
-                      color: colors.onSurfaceVariant,
-                      fontSize: 13,
-                    ),
-                  ),
+                  Text(ConfigHolder.appVersion, style: text.labelLarge?.copyWith(color: colors.onSurfaceVariant)),
                   SizedBox(height: constants.paddingMedium),
                 ],
               ),
@@ -143,6 +123,7 @@ class _Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
     final constants = context.constantsTheme;
+    final text = context.textTheme;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -154,21 +135,11 @@ class _Logo extends StatelessWidget {
             children: [
               TextSpan(
                 text: 'Manga',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: colors.primary,
-                  fontFamily: 'Exo2',
-                ),
+                style: text.displaySmall?.copyWith(color: colors.primary),
               ),
               TextSpan(
                 text: 'Tek',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: colors.secondary,
-                  fontFamily: 'Exo2',
-                ),
+                style: text.displaySmall?.copyWith(color: colors.secondary),
               ),
             ],
           ),
@@ -207,10 +178,7 @@ class _LoaderOrForm extends StatelessWidget {
           opacity: fadeAnimation,
           child: SlideTransition(
             position: slideAnimation,
-            child: _LoginForm(
-              emailController: emailController,
-              passwordController: passwordController,
-            ),
+            child: _LoginForm(emailController: emailController, passwordController: passwordController),
           ),
         );
       },
@@ -223,10 +191,7 @@ class _LoaderOrForm extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class _LoginForm extends StatelessWidget {
-  const _LoginForm({
-    required this.emailController,
-    required this.passwordController,
-  });
+  const _LoginForm({required this.emailController, required this.passwordController});
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -239,10 +204,7 @@ class _LoginForm extends StatelessWidget {
     return BlocBuilder<LoginCubit, BaseState<UserEntity>>(
       builder: (context, loginState) {
         final isLoading = loginState.isLoading;
-        final hasError = loginState.maybe(
-              onError: (e) => e.type == ExceptionType.auth,
-            ) ??
-            false;
+        final hasError = loginState.maybe(onError: (e) => e.type == ExceptionType.auth) ?? false;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -267,15 +229,11 @@ class _LoginForm extends StatelessWidget {
               SizedBox(height: constants.paddingSmall),
               Text(
                 trad.errorCredentials,
-                style: TextStyle(color: context.colorTheme.error, fontSize: 13),
+                style: context.textTheme.bodyMedium?.copyWith(color: context.colorTheme.error),
               ),
             ],
             SizedBox(height: constants.paddingMedium),
-            CustomButton(
-              label: trad.login,
-              isLoading: isLoading,
-              onPressed: () => _submit(context),
-            ),
+            CustomButton(label: trad.login, isLoading: isLoading, onPressed: () => _submit(context)),
           ],
         );
       },
@@ -283,9 +241,6 @@ class _LoginForm extends StatelessWidget {
   }
 
   void _submit(BuildContext context) {
-    context.read<LoginCubit>().login(
-          email: emailController.text.trim(),
-          password: passwordController.text,
-        );
+    context.read<LoginCubit>().login(email: emailController.text.trim(), password: passwordController.text);
   }
 }

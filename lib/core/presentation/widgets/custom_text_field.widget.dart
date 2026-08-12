@@ -38,6 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
     final constants = context.constantsTheme;
+    final text = context.textTheme;
     final radius = BorderRadius.circular(constants.cornerRound);
 
     return TextField(
@@ -47,10 +48,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       onSubmitted: widget.onSubmitted,
-      style: TextStyle(color: colors.onSurface),
+      style: text.bodyMedium?.copyWith(color: colors.onSurface),
       decoration: InputDecoration(
         labelText: widget.label,
-        labelStyle: TextStyle(color: colors.onSurfaceVariant),
+        labelStyle: text.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
         filled: true,
         fillColor: colors.surfaceVariant,
         border: OutlineInputBorder(
@@ -67,16 +68,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: radius,
-          borderSide: BorderSide(
-            color: colors.onSurfaceVariant.withValues(alpha: 0.4),
-          ),
+          borderSide: BorderSide(color: colors.onSurfaceVariant.withValues(alpha: 0.4)),
         ),
         suffixIcon: widget.isObscure
             ? IconButton(
-                icon: Icon(
-                  _obscured ? Icons.visibility_off : Icons.visibility,
-                  color: colors.onSurfaceVariant,
-                ),
+                icon: Icon(_obscured ? Icons.visibility_off : Icons.visibility, color: colors.onSurfaceVariant),
                 onPressed: () => setState(() => _obscured = !_obscured),
               )
             : null,

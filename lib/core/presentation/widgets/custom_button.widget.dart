@@ -21,6 +21,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colorTheme;
     final constants = context.constantsTheme;
+    final text = context.textTheme;
     final isPrimary = type == CustomButtonType.primary;
 
     final effectiveOnPressed = isLoading ? null : onPressed;
@@ -31,19 +32,10 @@ class CustomButton extends StatelessWidget {
             height: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2.5,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isPrimary ? colors.onBackground : colors.primary,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(isPrimary ? colors.onBackground : colors.primary),
             ),
           )
-        : Text(
-            label,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: isPrimary ? colors.onBackground : colors.primary,
-            ),
-          );
+        : Text(label, style: text.titleLarge?.copyWith(color: isPrimary ? colors.onBackground : colors.primary));
 
     if (isPrimary) {
       return SizedBox(
@@ -54,9 +46,7 @@ class CustomButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: colors.primary,
             disabledBackgroundColor: colors.primary.withValues(alpha: 0.6),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(constants.cornerRound),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(constants.cornerRound)),
           ),
           child: child,
         ),
@@ -70,9 +60,7 @@ class CustomButton extends StatelessWidget {
         onPressed: effectiveOnPressed,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: colors.primary),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(constants.cornerRound),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(constants.cornerRound)),
         ),
         child: child,
       ),

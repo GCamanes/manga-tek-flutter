@@ -8,12 +8,14 @@ description: Naming and placement rules for the presentation layer. Use when wor
 - Must only depend on the domain layer — never import from `data/`
 - Never use hardcoded numeric UI values (padding, radius, heights) — always use `context.constantsTheme`
 - Never use hardcoded colors — always use `context.colorTheme`
+- Never use hardcoded `TextStyle` — always use `context.textTheme.<style>`, with `.copyWith(color: ...)` only to apply color
 
 ## Theme extensions (via `BuildContext`)
 
 ```dart
-final colors = context.colorTheme;       // ColorTheme — colors
+final colors = context.colorTheme;        // ColorTheme — colors
 final constants = context.constantsTheme; // ConstantsTheme — dimensions
+final text = context.textTheme;           // TextTheme — typography
 ```
 
 ## File naming

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mangatek_flutter/core/theme/constants.theme.dart';
+import 'package:mangatek_flutter/generated/fonts.gen.dart';
 
 import 'app_colors.dart' as colors;
-import 'color_theme.dart';
+import 'color.theme.dart';
 
 /// Provides [ThemeData] for both light and dark themes.
 /// Usage in [MaterialApp]:
@@ -52,6 +53,7 @@ class AppTheme {
       brightness: brightness,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
+      textTheme: _buildTextTheme(),
       extensions: [
         ColorTheme(
           primary: primary,
@@ -68,6 +70,29 @@ class AppTheme {
         ),
         ConstantsTheme(),
       ],
+    );
+  }
+
+  static TextTheme _buildTextTheme() {
+    TextStyle style(double size, FontWeight weight) =>
+        TextStyle(fontFamily: FontFamily.exo2, fontSize: size, fontWeight: weight);
+
+    return TextTheme(
+      displayLarge: style(57, FontWeight.w700),
+      displayMedium: style(45, FontWeight.w700),
+      displaySmall: style(36, FontWeight.w700),
+      headlineLarge: style(32, FontWeight.w500),
+      headlineMedium: style(28, FontWeight.w500),
+      headlineSmall: style(24, FontWeight.w500),
+      titleLarge: style(22, FontWeight.w500),
+      titleMedium: style(16, FontWeight.w500),
+      titleSmall: style(14, FontWeight.w500),
+      bodyLarge: style(16, FontWeight.w400),
+      bodyMedium: style(14, FontWeight.w400),
+      bodySmall: style(12, FontWeight.w400),
+      labelLarge: style(14, FontWeight.w500),
+      labelMedium: style(12, FontWeight.w500),
+      labelSmall: style(11, FontWeight.w500),
     );
   }
 }
