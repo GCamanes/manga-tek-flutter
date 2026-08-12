@@ -12,7 +12,14 @@ description: Rules for repository implementations in this app. Use when creating
 - Name: `<Feature>RepositoryImpl` → file: `<feature>.repository_impl.dart`
 - Placed in `repositories_impl/`
 
-## Pattern — Future
+## RepositoryMixin
+
+`guard` and `guardOnStream` catch all exceptions and route them through a private `_mapError` method that maps known exceptions (e.g. `FirebaseAuthException` → `ExceptionType.auth`) to `AppException`.
+
+- Never write try/catch manually in a repo impl
+- Never override `_mapError` — add new exception mappings directly inside `RepositoryMixin` in `core/data/repository.mixin.dart`
+
+
 
 ```dart
 class ItemRepositoryImpl with RepositoryMixin implements ItemRepository {

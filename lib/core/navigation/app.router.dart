@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:mangatek_flutter/features/auth/presentation/pages/login.page.dart';
 import 'package:mangatek_flutter/features/home/presentation/pages/home.page.dart';
-import 'package:mangatek_flutter/features/login/presentation/pages/login.page.dart';
 
 import 'app.routes.dart';
 

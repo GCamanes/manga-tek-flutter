@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mangatek_flutter/core/domain/app.exception.dart';
 
 mixin RepositoryMixin {
@@ -8,7 +9,7 @@ mixin RepositoryMixin {
     try {
       return await call();
     } catch (error, stackTrace) {
-      throw _handleError(error, stackTrace);
+      throw _mapError(error, stackTrace);
     }
   }
 
@@ -19,12 +20,15 @@ mixin RepositoryMixin {
         yield value;
       }
     } catch (error, stackTrace) {
-      throw _handleError(error, stackTrace);
+      throw _mapError(error, stackTrace);
     }
   }
 
-  AppException _handleError(dynamic error, StackTrace stackTrace) {
-    // TODO: map datasource-specific exceptions (e.g. FirebaseException) to AppException types
+  AppException _mapError(dynamic error, StackTrace stackTrace) {
+    if (error is AppException) return error;
+    if (error is FirebaseAuthException) {
+      return AppException(type: ExceptionType.auth, stackTrace: stackTrace);
+    }
     return AppException(type: ExceptionType.unknown, stackTrace: stackTrace);
   }
 }
